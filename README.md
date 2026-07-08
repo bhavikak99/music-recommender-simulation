@@ -29,7 +29,11 @@ Each `Song` in my system will use these features:
 - `acousticness`
 - `tempo_bpm`
 
-Each `UserProfile` will store the user's preferred genre, mood, energy level, valence, danceability, acousticness, and tempo. The `Recommender` will compute a score for each song by giving points for matching categorical features like genre and mood, then adding similarity scores for numerical features. Songs with the highest total scores will be ranked first and recommended to the user.
+Each `UserProfile` stores the user's preferred genre, mood, energy level, valence, danceability, acousticness, and tempo. The recommender starts each song with a score of 0. It awards **3 points** for a matching genre and **2 points** for a matching mood. For the numerical features (energy, valence, danceability, acousticness, and tempo), it gives higher similarity scores to songs whose values are closer to the user's preferred values. After every song has been scored, the recommender sorts the songs from highest score to lowest score and recommends the top matches.
+
+Because genre has the highest weight, this recommender may favor songs with the correct genre even if songs from other genres have very similar moods or audio characteristics. This could create a bias toward certain genres and reduce the variety of recommendations.
+
+These features are useful because genre and mood describe the overall style or vibe of a song, while energy, valence, danceability, acousticness, and tempo give more detailed numeric information. For example, two songs can both be pop, but one might be calm and acoustic while another is fast, energetic, and danceable.
 
 ---
 
