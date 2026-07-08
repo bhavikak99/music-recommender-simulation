@@ -17,17 +17,19 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world music platforms use user behavior and song information to predict what someone might enjoy next. For example, collaborative filtering looks at patterns from many users, such as likes, skips, playlists, and repeat listens, while content-based filtering looks at the features of songs themselves, such as genre, mood, tempo, and energy. My simulator will focus on a simple content-based approach: it compares a user's taste profile to each song's attributes and gives higher scores to songs that are closer matches.
 
-Some prompts to answer:
+Each `Song` in my system will use these features:
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+- `genre`
+- `mood`
+- `energy`
+- `valence`
+- `danceability`
+- `acousticness`
+- `tempo_bpm`
 
-You can include a simple diagram or bullet list if helpful.
+Each `UserProfile` will store the user's preferred genre, mood, energy level, valence, danceability, acousticness, and tempo. The `Recommender` will compute a score for each song by giving points for matching categorical features like genre and mood, then adding similarity scores for numerical features. Songs with the highest total scores will be ranked first and recommended to the user.
 
 ---
 
