@@ -37,13 +37,53 @@ class Recommender:
     def __init__(self, songs: List[Song]):
         self.songs = songs
 
+    def score_song_object(self, user: UserProfile, song: Song) -> float:
+        score = 0.0
+
+        if song.genre == user.favorite_genre:
+            score += 3.0
+
+        if song.mood == user.favorite_mood:
+            score += 2.0
+
+        score += 1 - abs(song.energy - user.target_energy)
+
+        if user.likes_acoustic and song.acousticness >= 0.5:
+            score += 1.0
+        elif not user.likes_acoustic and song.acousticness < 0.5:
+            score += 1.0
+
+        return score
+
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        scored_songs = []
+
+        for song in self.songs:
+            score = self.score_song_object(user, song)
+            scored_songs.append((song, score))
+
+        scored_songs.sort(key=lambda item: item[1], reverse=True)
+
+        return [song for song, score in scored_songs[:k]]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        reasons = []
+
+        if song.genre == user.favorite_genre:
+            reasons.append(f"matches your favorite genre: {user.favorite_genre}")
+
+        if song.mood == user.favorite_mood:
+            reasons.append(f"matches your favorite mood: {user.favorite_mood}")
+
+        energy_similarity = 1 - abs(song.energy - user.target_energy)
+        reasons.append(f"has energy close to your target ({energy_similarity:.2f} similarity)")
+
+        if user.likes_acoustic and song.acousticness >= 0.5:
+            reasons.append("matches your preference for acoustic songs")
+        elif not user.likes_acoustic and song.acousticness < 0.5:
+            reasons.append("matches your preference for less acoustic songs")
+
+        return "; ".join(reasons)
 
 def load_songs(csv_path: str) -> List[Dict]:
     """
