@@ -108,7 +108,7 @@ def load_songs(csv_path: str) -> List[Dict]:
 
     return songs
 
-def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
+def score_song(user_prefs: Dict, song: Dict, mode: str = "genre") -> Tuple[float, List[str]]:
     """
     Scores a single song against user preferences.
     Required by recommend_songs() and src/main.py
@@ -116,13 +116,26 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     score = 0.0
     reasons = []
 
+    if mode == "genre":
+        genre_points = 3.0
+        mood_points = 2.0
+    elif mode == "mood":
+        genre_points = 2.0
+        mood_points = 3.0
+    elif mode == "energy":
+        genre_points = 1.0
+        mood_points = 1.0
+    else:
+        genre_points = 3.0
+        mood_points = 2.0
+
     if song["genre"] == user_prefs["genre"]:
-        score += 3.0
-        reasons.append("genre match (+3.0)")
+        score += genre_points
+        reasons.append(f"genre match (+{genre_points:.1f})")
 
     if song["mood"] == user_prefs["mood"]:
-        score += 2.0
-        reasons.append("mood match (+2.0)")
+        score += mood_points
+        reasons.append(f"mood match (+{mood_points:.1f})")
 
     energy_similarity = 1 - abs(song["energy"] - user_prefs["energy"])
     score += energy_similarity
@@ -130,7 +143,12 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     return score, reasons
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
+def recommend_songs(
+    user_prefs: Dict,
+    songs: List[Dict],
+    k: int = 5,
+    mode: str = "genre",
+) -> List[Tuple[Dict, float, str]]:
     """
     Functional implementation of the recommendation logic.
     Required by src/main.py
@@ -138,7 +156,7 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tup
     scored_songs = []
 
     for song in songs:
-        score, reasons = score_song(user_prefs, song)
+        score, reasons = score_song(user_prefs, song, mode)
         explanation = ", ".join(reasons)
         scored_songs.append((song, score, explanation))
 

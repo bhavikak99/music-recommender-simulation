@@ -40,9 +40,14 @@ def main() -> None:
     }
 
     for profile_name, user_prefs in profiles.items():
-        recommendations = recommend_songs(user_prefs, songs, k=5)
+        recommendations = recommend_songs(
+            user_prefs,
+            songs,
+            k=5,
+            mode="energy",
+        )
 
-        print(f"\nProfile: {profile_name}")
+        print(f"\nProfile: {profile_name} | Mode: Energy-Focused")
         print("Top recommendations:\n")
 
         table = []
