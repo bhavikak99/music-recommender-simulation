@@ -8,9 +8,13 @@
 
 ## 2. Intended Use
 
-This recommender is designed to recommend songs using a simple content-based recommendation approach. It compares a user's music preferences with the attributes of each song and recommends the songs that are the closest match.
+This recommender is designed to recommend songs using a simple content-based recommendation approach. It compares a user's preferred genre, mood, and energy level with the attributes of each song and recommends the closest matches.
 
-The model assumes that a user's preferred genre, mood, and energy level are good indicators of the type of music they enjoy. This project was built for classroom exploration to demonstrate how recommendation systems work rather than for real-world deployment.
+This project was created as a classroom simulation to demonstrate how recommendation systems work. It is intended for learning and experimentation rather than real-world music streaming services.
+
+### Non-Intended Use
+
+This recommender is not intended to provide personalized recommendations for real music streaming services. It should not be used to make important decisions or represent real user preferences because it uses a very small dataset and a simple scoring algorithm that considers only a few song features.
 
 ---
 
@@ -87,6 +91,7 @@ Another improvement would be combining content-based recommendations with collab
 
 ## 9. Personal Reflection
 
-This project helped me understand how recommendation systems transform user preferences into predictions using weighted scoring and ranking. I learned that recommendation systems compare many pieces of information before deciding which items to recommend.
+The biggest learning moment during this project was understanding how recommendation systems transform user preferences into predictions using weighted scoring and ranking. I learned that recommendation systems compare multiple song features before deciding which songs to recommend rather than simply matching genres.
 
-One of the most interesting discoveries was seeing how small changes to the scoring weights could significantly change the recommendation results. It also made me realize how easily recommendation systems can become biased if one feature is given too much importance.
+AI was helpful for brainstorming scoring ideas, explaining recommendation concepts, and helping me debug my Python code. However, I still needed to verify the suggestions, test the program, and make sure the implementation matched the project requirements. One of the most interesting discoveries was seeing how small changes to the scoring weights significantly changed the recommendation results. If I continued this project, I would include additional features such as tempo, danceability, and collaborative filtering to create more accurate and diverse recommendations.
+
