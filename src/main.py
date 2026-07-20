@@ -60,6 +60,7 @@ def main() -> None:
     }
 
     for profile_name, user_prefs in profiles.items():
+        # Change mode to "genre", "mood", or "energy" to switch ranking strategies.
         recommendations = recommend_songs(
             user_prefs,
             songs,
