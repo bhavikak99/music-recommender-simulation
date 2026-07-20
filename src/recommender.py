@@ -103,6 +103,10 @@ def load_songs(csv_path: str) -> List[Dict]:
             row["valence"] = float(row["valence"])
             row["danceability"] = float(row["danceability"])
             row["acousticness"] = float(row["acousticness"])
+            row["popularity"] = int(row["popularity"])
+            row["instrumentalness"] = float(row["instrumentalness"])
+            row["liveness"] = float(row["liveness"])
+            row["speechiness"] = float(row["speechiness"])
 
             songs.append(row)
 
@@ -140,6 +144,42 @@ def score_song(user_prefs: Dict, song: Dict, mode: str = "genre") -> Tuple[float
     energy_similarity = 1 - abs(song["energy"] - user_prefs["energy"])
     score += energy_similarity
     reasons.append(f"energy similarity (+{energy_similarity:.2f})")
+
+    popularity_similarity = 1 - abs(
+        song["popularity"] - user_prefs["target_popularity"]
+    ) / 100
+    score += popularity_similarity
+    reasons.append(
+        f"popularity similarity (+{popularity_similarity:.2f})"
+    )
+
+    if song["release_decade"] == user_prefs["preferred_release_decade"]:
+        score += 1.0
+        reasons.append("release decade match (+1.0)")
+
+    instrumentalness_similarity = 1 - abs(
+        song["instrumentalness"] - user_prefs["target_instrumentalness"]
+    )
+    score += instrumentalness_similarity
+    reasons.append(
+        f"instrumentalness similarity (+{instrumentalness_similarity:.2f})"
+    )
+
+    liveness_similarity = 1 - abs(
+        song["liveness"] - user_prefs["target_liveness"]
+    )
+    score += liveness_similarity
+    reasons.append(
+        f"liveness similarity (+{liveness_similarity:.2f})"
+    )
+
+    speechiness_similarity = 1 - abs(
+        song["speechiness"] - user_prefs["target_speechiness"]
+    )
+    score += speechiness_similarity
+    reasons.append(
+        f"speechiness similarity (+{speechiness_similarity:.2f})"
+    )
 
     return score, reasons
 

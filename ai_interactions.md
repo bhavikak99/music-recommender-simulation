@@ -42,6 +42,28 @@
 
 <!-- Point to the relevant class or method -->
 
+## Optional Challenge 1: Advanced Song Features
+
+### Prompt Used
+
+I asked AI to generate realistic values for five new song attributes: popularity, release decade, instrumentalness, liveness, and speechiness. The values had to match the existing 18 songs and use valid numeric ranges.
+
+### AI-Generated Changes
+
+The dataset was expanded with five new columns:
+
+- popularity
+- release_decade
+- instrumentalness
+- liveness
+- speechiness
+
+The CSV loader was updated to convert the new numeric values into integers or floats. The scoring function was also updated so each new feature contributes to the final recommendation score.
+
+### Manual Verification
+
+I checked the CSV header and several rows to make sure every song had the same number of columns. I ran the recommender with four user profiles and confirmed that the new attributes changed the rankings. For example, the conflicting calm workout profile began favoring popular, recent, low-speech songs even when they did not match the requested genre or mood. This showed that adding many equally weighted features can overwhelm the original preferences. I also ran `pytest`, and all tests passed.
+
 ## Optional Challenge 2: Multiple Scoring Modes
 
 ### Prompt Used
