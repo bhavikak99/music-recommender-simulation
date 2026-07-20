@@ -148,6 +148,7 @@ def recommend_songs(
     songs: List[Dict],
     k: int = 5,
     mode: str = "genre",
+    diversity_penalty: float = 0.5,
 ) -> List[Tuple[Dict, float, str]]:
     """
     Functional implementation of the recommendation logic.
@@ -162,4 +163,40 @@ def recommend_songs(
 
     scored_songs.sort(key=lambda item: item[1], reverse=True)
 
-    return scored_songs[:k]
+    recommendations = []
+    selected_artists = set()
+    remaining_songs = scored_songs.copy()
+
+    while remaining_songs and len(recommendations) < k:
+        adjusted_candidates = []
+
+        for song, score, explanation in remaining_songs:
+            adjusted_score = score
+            adjusted_explanation = explanation
+
+            if song["artist"] in selected_artists:
+                adjusted_score -= diversity_penalty
+                adjusted_explanation += (
+                    f", repeated artist penalty (-{diversity_penalty:.1f})"
+                )
+
+            adjusted_candidates.append(
+                (song, adjusted_score, adjusted_explanation)
+            )
+
+        best_song, best_score, best_explanation = max(
+            adjusted_candidates,
+            key=lambda item: item[1],
+        )
+
+        recommendations.append(
+            (best_song, best_score, best_explanation)
+        )
+        selected_artists.add(best_song["artist"])
+
+        remaining_songs = [
+            item for item in remaining_songs
+            if item[0]["id"] != best_song["id"]
+        ]
+
+    return recommendations

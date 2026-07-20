@@ -61,3 +61,19 @@ The same scoring and ranking functions are reused, which keeps the design modula
 ### Manual Verification
 
 I ran the recommender using the Energy-Focused mode with four user profiles. The output changed because genre and mood had less influence relative to energy. For example, Gym Hero ranked above Aftermath Echo for the Deep Intense Rock profile because its energy was closer to the target. I also ran `pytest`, and all tests passed.
+
+## Optional Challenge 3: Diversity and Fairness Logic
+
+### Prompt Used
+
+Help me add a diversity penalty to my music recommender. If an artist is already represented in the selected recommendations, reduce the score of additional songs by that artist. The selection should be recalculated after every recommendation so another song can replace a repeated artist when appropriate.
+
+### AI-Suggested Design
+
+The AI suggested selecting recommendations one at a time. Before each selection, the algorithm recalculates the adjusted scores of the remaining songs. Songs by an artist already included in the recommendation list receive a 0.5-point penalty.
+
+This greedy selection process allows songs outside the original top five to move up when repeated artists are penalized.
+
+### Manual Verification
+
+I tested the diversity logic using the Chill Lofi profile. Midnight Coding and Focus Flow are both by LoRoom, so Focus Flow received a repeated-artist penalty of 0.5 points. It remained in the top five because its adjusted score was still high enough. I confirmed that the explanation displayed the penalty and that all pytest tests passed.
