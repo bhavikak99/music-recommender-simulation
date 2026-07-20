@@ -8,61 +8,78 @@
 
 ## 2. Intended Use
 
-This recommender is designed to recommend songs based on a user's music preferences using a simple content-based recommendation approach. It compares song features such as genre, mood, and energy to the user's preferred values and ranks the songs from best to worst match.
+This recommender is designed to recommend songs using a simple content-based recommendation approach. It compares a user's music preferences with the attributes of each song and recommends the songs that are the closest match.
 
-This model assumes that a user's favorite genre, mood, and energy level are good indicators of what they will enjoy. It was created as a classroom project to demonstrate how recommendation systems work rather than for real-world production use.
+The model assumes that a user's preferred genre, mood, and energy level are good indicators of the type of music they enjoy. This project was built for classroom exploration to demonstrate how recommendation systems work rather than for real-world deployment.
 
 ---
 
 ## 3. How the Model Works
 
-Each song contains descriptive features such as genre, mood, energy, tempo, danceability, valence, and acousticness. The current recommendation algorithm uses genre, mood, and energy to calculate a score.
+Each song contains information such as genre, mood, energy, tempo, danceability, valence, and acousticness. The current recommendation algorithm focuses on genre, mood, and energy.
 
-The model begins with a score of zero for every song. It awards 3 points when the song's genre matches the user's preferred genre and 2 points when the mood matches. It then calculates an energy similarity score by comparing the song's energy level to the user's preferred energy level. Songs with higher total scores are ranked first and recommended to the user.
+Every song starts with a score of zero. If the song matches the user's preferred genre, it earns additional points. If it matches the preferred mood, it earns more points. The model also compares the song's energy level to the user's preferred energy level. Songs with energy values closer to the user's preference receive a higher similarity score. After every song has been scored, the songs are sorted from highest score to lowest score and the top recommendations are returned along with an explanation of why they were selected.
 
-Compared to the starter project, I implemented a weighted scoring system that explains why each recommendation was selected.
+Compared to the starter code, I implemented a weighted scoring system, recommendation explanations, CSV loading, and song ranking.
 
 ---
 
 ## 4. Data
 
-The recommender uses a CSV dataset containing 18 songs. The dataset includes a variety of genres such as pop, rock, lofi, jazz, ambient, folk, dance, electronic, synthwave, and chiptune. It also includes moods like happy, energetic, relaxed, chill, focused, moody, peaceful, and intense.
+The recommender uses a CSV dataset containing **18 songs**. The catalog includes genres such as pop, rock, lofi, ambient, jazz, dance, electronic, synthwave, folk, indie pop, and chiptune. The songs also include moods such as happy, chill, focused, relaxed, energetic, moody, peaceful, and intense.
 
-I expanded the original dataset by adding additional songs to increase genre and mood diversity.
+I expanded the original dataset by adding eight additional songs to create more variety.
 
-Although the dataset includes several useful numerical features, it is still very small and does not include information such as lyrics, release year, popularity, or listening history.
+The dataset is still very small and does not include lyrics, artist popularity, listening history, release year, or user interaction data.
 
 ---
 
 ## 5. Strengths
 
-The recommender performs well when the user's preferences clearly match songs in the dataset. For example, the dance and energetic user profile correctly ranked **Club Gravity** as the highest recommendation because it matched the user's preferred genre, mood, and energy level.
+The recommender performs well when users have clear music preferences. For example:
 
-The weighted scoring system is easy to understand, and the recommendation explanations help users see why each song received its score.
+* The **High-Energy Pop** profile correctly recommended upbeat pop songs such as *Sunrise City*.
+* The **Chill Lofi** profile recommended calm study music like *Library Rain* and *Midnight Coding*.
+* The **Deep Intense Rock** profile correctly ranked *Storm Runner* first.
+
+The weighted scoring system is simple to understand, and the recommendation explanations make it easy to see why each song was selected.
 
 ---
 
 ## 6. Limitations and Bias
 
-This recommender only considers genre, mood, and energy when calculating recommendations. It ignores many factors that influence music preferences, including artists, lyrics, listening history, playlists, and popularity.
+This recommender only considers genre, mood, and energy when calculating recommendations. It ignores other important information such as artists, lyrics, playlists, listening history, and popularity.
 
-Because genre receives the highest weight, the recommender may repeatedly recommend songs from the same genre even if songs from other genres have similar moods or energy. This could create a filter bubble and reduce recommendation diversity.
+One weakness I discovered during testing was that genre and mood often outweigh the energy preference. For example, the **Conflicting Calm Workout** profile requested very high energy music while also preferring ambient and relaxed songs. Even though *Ocean Breathing* had low energy, it still ranked first because it matched both the preferred genre and mood. This shows that the current scoring system can create a filter bubble by favoring category matches over other song characteristics.
 
 ---
 
 ## 7. Evaluation
 
-I tested the recommender using both the starter pop/happy profile and my custom dance/energetic profile.
+I tested the recommender using four different user profiles:
 
-For the dance profile, the recommender ranked **Club Gravity** first, followed by other energetic songs such as **Pixel Rush** and **Gym Hero**. These recommendations matched my expectations because they closely matched the user's preferences.
+* High-Energy Pop
+* Chill Lofi
+* Deep Intense Rock
+* Conflicting Calm Workout (edge case)
 
-I also verified that the project passed all provided pytest tests and that the command-line application produced readable recommendation explanations.
+The first three profiles produced recommendations that matched my expectations. Pop songs were recommended for the pop profile, lofi songs for the lofi profile, and rock songs for the rock profile.
+
+The conflicting profile produced the most interesting result. Although the user requested very high energy music, *Ocean Breathing* still ranked first because it matched both the preferred genre and mood. This showed that the genre and mood weights currently have more influence than the energy similarity score.
+
+I also performed a weight-shift experiment by reducing the genre weight and increasing the importance of energy. This caused high-energy songs to move higher in several recommendation lists, making the recommender more sensitive to energy differences. However, the conflicting profile still showed that matching genre and mood remained very influential.
+
+### Profile Comparisons
+
+* **High-Energy Pop vs. Chill Lofi:** The pop profile recommended upbeat pop songs, while the lofi profile shifted toward slower and more relaxing songs because both the preferred genre and mood changed.
+* **Chill Lofi vs. Deep Intense Rock:** The recommendations changed from calm, low-energy study music to energetic rock songs because both genre and mood became much more intense.
+* **Deep Intense Rock vs. Conflicting Calm Workout:** The rock profile favored energetic rock songs, while the conflicting profile selected calm ambient music despite the high energy target, demonstrating how strongly genre and mood influence the recommendations.
 
 ---
 
 ## 8. Future Work
 
-If I continued developing this project, I would include additional song features such as valence, danceability, acousticness, and tempo in the scoring algorithm. I would also allow users to assign their own weights to different features.
+If I continued developing this project, I would include additional song features such as tempo, valence, danceability, and acousticness in the scoring algorithm. I would also allow users to customize the importance of each feature instead of using fixed weights.
 
 Another improvement would be combining content-based recommendations with collaborative filtering so the recommender could learn from the listening behavior of similar users while still considering song characteristics.
 
@@ -70,6 +87,6 @@ Another improvement would be combining content-based recommendations with collab
 
 ## 9. Personal Reflection
 
-This project helped me understand how recommendation systems transform user preferences into predictions using weighted scoring. I learned that recommendation systems are not simply matching genres but instead compare multiple features and rank every item before making suggestions.
+This project helped me understand how recommendation systems transform user preferences into predictions using weighted scoring and ranking. I learned that recommendation systems compare many pieces of information before deciding which items to recommend.
 
-I also realized that even simple recommendation systems can introduce bias depending on how the scoring algorithm is designed. Small decisions, such as giving genre a higher weight than mood, can significantly influence which songs users see and which songs they never discover.
+One of the most interesting discoveries was seeing how small changes to the scoring weights could significantly change the recommendation results. It also made me realize how easily recommendation systems can become biased if one feature is given too much importance.
