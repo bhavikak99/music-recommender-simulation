@@ -1,3 +1,4 @@
 pandas
 pytest
 streamlit
+tabulate==0.10.0
